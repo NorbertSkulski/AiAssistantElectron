@@ -1,10 +1,14 @@
-const { app, BrowserWindow, globalShortcut,Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, globalShortcut, Menu, Tray } = require('electron');
 const path = require('path');
 const { snippedWindow } = require('./snippet');
 
-let win;
-// Menu.setApplicationMenu(null);
+const dotenv = require('dotenv');
+dotenv.config();
 
+let win;
+let tray;
+// Menu.setApplicationMenu(null);
+const isDev = process.env.NODE_ENV === 'development';
 const createWindow = () => {
     win = new BrowserWindow({
         width: 800,
@@ -15,15 +19,47 @@ const createWindow = () => {
         }
     })
 
-    win.loadFile('src/scenes/homeScene.html')   
+    if (isDev) {
+        win.loadURL('http://localhost:5173');
+    } else {
+        win.loadFile(path.join(__dirname, "..", 'dist/index.html'));
+    }
+
     win.setContentProtection(true);
+
+    win.on('close', (event) => {
+        if (!app.isQuitting) {
+            event.preventDefault(); 
+            win.hide();      
+        }
+    });
 }
 
 
-
 app.on('ready', () => {
-    ipcMain.handle('ping', () => 'pong')
-    createWindow()
+    createWindow();
+
+    const iconPath = path.join(__dirname, 'icon.png');
+    tray = new Tray(iconPath);
+
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'Pokaż aplikację', click: () => win.show() },
+        { type: 'separator' },
+        {
+            label: 'Zamknij całkowicie',
+            click: () => {
+                app.isQuitting = true; 
+                app.quit();
+            }
+        }
+    ]);
+
+    tray.setToolTip('Moja aplikacja w tle');
+    tray.setContextMenu(contextMenu);
+
+    tray.on('click', () => {
+        win.isVisible() ? win.hide() : win.show();
+    });
 })
 
 app.on('activate', () => {

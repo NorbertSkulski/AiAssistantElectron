@@ -1,18 +1,52 @@
 {
   "name": "aiasisstantelectron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron .",
+    "dev": "concurrently \"vite\" \"wait-on \"http://localhost:5173\" && cross-env NODE_ENV=development electron .\"",
+    "build": "vite build && electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.twojanazwa.apka",
+    "productName": "Moja Super Apka",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "src/main.js",
+      "src/snippet/**/*",
+      "src/preload.js",
+      "src/icon.png",
+      ".env"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "author": "Norbert Skulski",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "electron": "^41.1.1"
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^41.1.1",
+    "electron-builder": "^26.8.1",
+    "sass-embedded": "^1.99.0",
+    "vite": "^8.0.7",
+    "wait-on": "^9.0.4"
   },
   "dependencies": {
-    "fs": "^0.0.1-security"
+    "dotenv": "^17.4.1",
+    "fs": "^0.0.1-security",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }
