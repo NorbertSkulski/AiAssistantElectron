@@ -1,6 +1,6 @@
 {
   "name": "aiasisstantelectron",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/main.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on \"http://localhost:5173\" && cross-env NODE_ENV=development electron .\"",
@@ -44,6 +44,7 @@
     "wait-on": "^9.0.4"
   },
   "dependencies": {
+    "dexie": "^4.4.2",
     "dotenv": "^17.4.1",
     "fs": "^0.0.1-security",
     "react": "^19.2.4",
