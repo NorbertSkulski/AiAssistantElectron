@@ -18,14 +18,14 @@ body{
     transition: grid-template-columns 0.3s ease;
 
     &.CloseMenu{
-        grid-template-columns: 50px 1fr;
+        grid-template-columns: 150px 1fr;
     }
     
 
     .MenuArea{
-        background-color: var(--menu-bg-color);
+        // background-color: var(--menu-bg-color);
         grid-column: 1/2;
-        border-right: 1px solid black;
+        // border-right: 1px solid black;
 
     }
 

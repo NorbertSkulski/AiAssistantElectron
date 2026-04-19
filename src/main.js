@@ -2,9 +2,6 @@ const { app, BrowserWindow, globalShortcut, Menu, Tray } = require('electron');
 const path = require('path');
 const { snippedWindow } = require('./snippet');
 
-const dotenv = require('dotenv');
-dotenv.config();
-
 let win;
 let tray;
 // Menu.setApplicationMenu(null);

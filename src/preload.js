@@ -7,5 +7,5 @@ contextBridge.exposeInMainWorld('api', {
 })
 
 contextBridge.exposeInMainWorld('env', {
-  TEST: process.env.TEST,
+  TEST: "test 123",
 })

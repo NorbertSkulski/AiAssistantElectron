@@ -18,16 +18,6 @@ const App = () => {
         loadSettings();
     }, [])
 
-    const toggleMenu = async () => {
-        const settingMenu = await settingsDb.settings.get({ key: 'menuClose' });
-        if (!settingMenu) {
-            await settingsDb.settings.add({ key: 'menuClose', value: true });
-        } else {
-            await settingsDb.settings.update(settingMenu.id, { value: !settingMenu.value });
-        }
-        ref.current.classList.toggle('CloseMenu');
-    }
-
     const handleAction = (formData,e) => {
         const query = formData.get("query");
         console.log(`You searched for '${query}'`);
@@ -41,8 +31,6 @@ const App = () => {
         <div className='MainWindow' ref={ref}>
             <div className='MenuArea'>
                 <Menu/>
-                <button onClick={toggleMenu}>click</button>
-
             </div>
             <div className='ContentArea'>content
 
