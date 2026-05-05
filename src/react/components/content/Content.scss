@@ -1,0 +1,15 @@
+.Content{
+    position: absolute;
+    right: -100%;
+    transition: right 0.5s ease-in-out;
+    > * {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    &.show{
+        right: 0;
+        > * {
+            opacity: 1;
+        }
+    }
+}
