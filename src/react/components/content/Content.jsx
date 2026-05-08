@@ -15,7 +15,7 @@ const Content = () => {
         }
     }
 
-    return <div className="Content bg-white w-full h-full rounded-lg p-4">
+    return <div className="Content bg-white w-full h-full rounded-lg ">
         {selectRoot(rootContextData?.selectedChat)}
     </div>
 

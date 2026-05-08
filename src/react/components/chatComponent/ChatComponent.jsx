@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react"
-import chatsDb from "../../apis/indexedDb/chatsDb"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useRootContext } from "../../context/RootContext"
 
 
@@ -24,7 +23,7 @@ const ChatComponent = (props) => {
 
     const rootContextData = useRootContext();
 
-    const scrollRef = useState(null);
+    const scrollRef = useRef(null);
 
 
     useEffect(()=>{

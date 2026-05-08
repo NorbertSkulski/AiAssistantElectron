@@ -1,26 +1,27 @@
 import { Textarea } from "@/components/ui/textarea"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRootContext } from "../../../context/RootContext";
 import { geminiGenerateText } from "../../../apis/geminiAi/geminiAi";
 
 const MainTextArea = (props) => {
 
-    const { uuid } = props;
+    const { uuid, chatNameField } = props;
 
     const [value, setValue] = useState("");
 
     const rootContextData = useRootContext();
 
 
-    const sendMessageToAi = async (selectedChat) => {
-        await geminiGenerateText(uuid, selectedChat?.name, [{ text: value }]);
+    const sendMessageToAi = async () => {
+        const chatUuid = await geminiGenerateText(uuid, chatNameField, [{ text: value }]);
+        if(!uuid)
+            rootContextData?.setSelectedChat(chatUuid);
         rootContextData?.loadChatsData();
     }
 
     const onSubmitEvent = (event) => {
         if (event.key === "Enter" && !event.shiftKey) {
-            const selectedChat = rootContextData?.chats?.find((chat) => chat.uuid === uuid);
-            sendMessageToAi(selectedChat);           
+            sendMessageToAi();           
             rootContextData?.setChats((prev) => prev.map(chat => {
                 if (chat.uuid === uuid) {
                     return { ...chat, contents: [...chat.contents, { role: "user", parts: [{ text: value }] } ,{ role: "model", parts: [{ text: "..." }] }] }

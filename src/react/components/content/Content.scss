@@ -1,13 +1,15 @@
 .Content{
     position: absolute;
-    right: -120%;
-    transition: right 0.3s ease-in-out;
+    right: 0;
+    width: 0;
+    transition: width 0.3s ease-in-out;
     > * {
         opacity: 0;
         transition: opacity 0.3s ease;
     }
     &.show{
-        right: 0%;
+        right: 0;
+        width: 100%;
         > * {
             opacity: 1;
         }

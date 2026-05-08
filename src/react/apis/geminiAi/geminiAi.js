@@ -26,24 +26,6 @@ export const geminiGenerateText = async (chatUuid, name, parts) => {
 
     contents.push({ role:"user", parts:parts })
 
-    // image example
-    // {
-    //     "contents": [
-    //       {
-    //         "role": "user",
-    //         "parts": [
-    //           { "text": "Co widzisz na tym zdjęciu?" },
-    //           {
-    //             "inlineData": {
-    //               "mimeType": "image/jpeg",
-    //               "data": "iVBORw0KGgoAAAANSUhEU..." // Tutaj długi ciąg Base64
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     ]
-    //   }
-
     const response = await ai.models.generateContent({
         model: GEMINI_API_MODEL?.value,
         contents: contents,
@@ -57,11 +39,12 @@ export const geminiGenerateText = async (chatUuid, name, parts) => {
 
     if(!chatUuid){
         const uuid = self.crypto.randomUUID();
+        chatUuid = uuid;
         await chatsDb.chats.add({ uuid: uuid, name:name, model: GEMINI_API_MODEL?.value, contents: contents });
     }else{
         await chatsDb.chats.update(chatUuid,{ name:name, model: GEMINI_API_MODEL?.value, contents: contents });
     }
 
-    return contents;
+    return chatUuid;
 
 }
