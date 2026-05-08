@@ -8,17 +8,14 @@ import {
     CommandList,
     CommandSeparator,
     CommandShortcut,
-  } from "@/components/ui/command"
-  import { Button } from "@/components/ui/button"
+} from "@/components/ui/command"
+import { Button } from "@/components/ui/button"
 import settingsDb from "../../apis/indexedDb/settingsDb";
-import { useEffect, useState } from "react";
-import chatsDb from "../../apis/indexedDb/chatsDb";
-import { geminiGenerateText } from "../../apis/geminiAi/geminiAi";
 import { useRootContext } from "../../context/RootContext";
+import "./Menu.scss";
 
 const Menu = () => {
 
-    const [chats, setChats] = useState([]);
     const rootContextData = useRootContext();
 
 
@@ -33,59 +30,52 @@ const Menu = () => {
         menu.classList.toggle('CloseMenu');
     }
 
-    const loadData = async() => {
-       const chats = await chatsDb.chats.toArray();
-       setChats(chats);
-    }
-
-    useEffect(()=>{
-        loadData();
-    },[])
-
-    console.log(chats)
-
-    // const createChat = async () => {
-    //         console.log("Click")
-
-    //     //  const res = await geminiGenerateText(null,"Norbert2 Skulski2",[{text:"2*2 ile to jest ?"}]);
-    //     //  console.log(res);
-    //      loadData()
-    // }
 
     const openChat = (uuid) => {
         rootContextData.setSelectedChat(uuid);
+
         const content = document.querySelector('.Content');
-        if(content.classList.contains('show')){
+        if (uuid === rootContextData.selectedChat && content.classList.contains('show')) {
+            content.classList.remove('show');
+            return;
+        }
+        if (uuid === rootContextData.selectedChat && !content.classList.contains('show')) {
+            const timeout = setTimeout(() => {
+                content.classList.add('show');
+                clearTimeout(timeout);
+            }, 400);
+            return;
+        }
+        if (content.classList.contains('show')) {
             content.classList.remove('show');
         }
-        const timeout = setTimeout(()=>{
+     
+        const timeout = setTimeout(() => {
             content.classList.add('show');
             clearTimeout(timeout);
-        },600);
+        }, 400);
     }
 
 
-    console.log('rootDataMenu', rootContextData);
-
     return (
-        <Command className="max-w-sm  rounded-none! rounded-r-lg! border relative">
+        <Command className="Menu max-w-sm  rounded-none! rounded-r-lg! border relative h-full">
             <CommandInput placeholder="Type a command or search..." />
-            <CommandList>
+            <CommandList className="xl:max-h-[85vh] lg:max-h-[80vh] md:max-h-[75vh] sm:max-h-[60vh] max-h-[50vh]" >
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Patients">
-                    <CommandItem onSelect={()=>openChat()} >New chat</CommandItem>                    
-                    {chats.map((chat) => (
-                        <CommandItem onSelect={()=>openChat(chat.uuid)} key={chat.uuid}>{chat.name}</CommandItem>
+                    <CommandItem onSelect={() => openChat()} >New chat</CommandItem>
+                    {rootContextData?.chats.map((chat) => (
+                        <CommandItem onSelect={() => openChat(chat.uuid)} key={chat.uuid}>{chat.name}</CommandItem>
                     ))}
                 </CommandGroup>
                 <CommandSeparator />
-                <CommandGroup heading="Settings">                 
-                    <CommandItem>Settings</CommandItem>
+                <CommandGroup heading="Settings">
+                    <CommandItem onSelect={() => openChat("settings")}>Settings</CommandItem>
                 </CommandGroup>
             </CommandList>
             <Button className="mt-auto mb-2 w-full " onClick={toggleMenu}>Close</Button>
         </Command>
     )
-}       
+}
 
 export default Menu;

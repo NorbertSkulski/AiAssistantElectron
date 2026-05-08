@@ -1,15 +1,22 @@
+import ChatRoute from "../../routes/chatRoute/ChatRoute";
 import { useRootContext } from "../../context/RootContext";
 import "./Content.scss";
+import SettingsRoute from "../../routes/settingsRoute/SettingsRoute";
 
 const Content = () => {
-
     const rootContextData = useRootContext();
 
-    console.log('rootDataContext', rootContextData);
+    const selectRoot = (selected) => {
+        switch (selected) {
+            case 'settings':
+                return <SettingsRoute />;
+            default:
+                return <ChatRoute uuid={selected} />;
+        }
+    }
 
     return <div className="Content bg-white w-full h-full rounded-lg p-4">
-        {/* tu komponenty do wyboru z menu */}
-        <div >Content area selected uuid: {rootContextData?.selectedChat}</div>
+        {selectRoot(rootContextData?.selectedChat)}
     </div>
 
 }

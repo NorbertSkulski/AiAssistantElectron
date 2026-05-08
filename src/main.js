@@ -22,7 +22,7 @@ const createWindow = () => {
         win.loadFile(path.join(__dirname, "..", 'dist/index.html'));
     }
 
-    win.setContentProtection(true);
+    // win.setContentProtection(true);
 
     win.on('close', (event) => {
         if (!app.isQuitting) {
