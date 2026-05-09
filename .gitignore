@@ -2,3 +2,4 @@
 package-lock.json
 dist
 dist-electron
+apiData.txt

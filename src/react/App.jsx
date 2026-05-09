@@ -5,6 +5,7 @@ import Menu from './components/menu/Menu';
 import Content from './components/content/Content';
 import { RootContextProvider, useRootContext } from './context/RootContext';
 import chatsDb from './apis/indexedDb/chatsDb';
+import { ToastContainer, toast } from 'react-toastify';
 
 const App = () => {
 
@@ -43,6 +44,7 @@ const App = () => {
                     <Content />
                 </div>
             </RootContextProvider>
+            <ToastContainer/>
         </div>
     );
 }

@@ -24,13 +24,11 @@ const ChatRoute = (props) => {
 
     const onKeyUp = () => {
         if (name?.length <= 0) {
-            console.log("name less0", name)
             setName(`Chat nr ${rootContextData?.chats?.length + 1 || 1}`);
         }
     }
 
     const onFocus = () => {
-        console.log("onFocus", name);
         setName("");
     }
 
