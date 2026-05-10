@@ -12,7 +12,10 @@ const createWindow = () => {
         height: 800,
         autoHideMenuBar: true,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true, 
+            nodeIntegration: false,
+            sandbox: false
         }
     })
 
@@ -26,8 +29,8 @@ const createWindow = () => {
 
     win.on('close', (event) => {
         if (!app.isQuitting) {
-            event.preventDefault(); 
-            win.hide();      
+            event.preventDefault();
+            win.hide();
         }
     });
 }
@@ -45,7 +48,7 @@ app.on('ready', () => {
         {
             label: 'Zamknij całkowicie',
             click: () => {
-                app.isQuitting = true; 
+                app.isQuitting = true;
                 app.quit();
             }
         }

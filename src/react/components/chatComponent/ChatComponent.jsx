@@ -1,60 +1,69 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useRootContext } from "../../context/RootContext"
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
+const MessageUserCloud = ({ children }) => {
 
-const MessageUserCloud = ({children}) => {
-    return<div className="border rounded-lg p-4 my-3 border-gray-300 w-fit ml-auto mr-1">
-        {children}
-    </div>
+    const rawHtml = marked.parse(children);
+
+    const cleanHtml = DOMPurify.sanitize(rawHtml);
+
+    return <div className="border rounded-lg p-4 my-3 border-gray-300 w-fit ml-auto mr-1" dangerouslySetInnerHTML={{ __html: cleanHtml }}/>
+
 }
 
-const MessageAICloud = ({children}) => {
-    return<div className="border rounded-lg p-4 my-3 border-gray-300 w-fit bg-[var(--main-bg-color)] text-white">
-         {children}
-    </div>
+const MessageAICloud = ({ children }) => {
+
+    const rawHtml = marked.parse(children);
+
+    const cleanHtml = DOMPurify.sanitize(rawHtml);
+
+    return <div className="border rounded-lg p-4 my-3 border-gray-300 w-fit bg-[var(--main-bg-color)] text-white" dangerouslySetInnerHTML={{ __html: cleanHtml }}/>
+
 }
 
 
 const ChatComponent = (props) => {
 
-    const {uuid} = props;
+    const { uuid } = props;
 
-    const [contentChats,setContentChats] = useState([]);
+    const [contentChats, setContentChats] = useState([]);
 
     const rootContextData = useRootContext();
 
     const scrollRef = useRef(null);
 
 
-    useEffect(()=>{
+    useEffect(() => {
         loadData(uuid);
-    },[uuid,rootContextData?.chats])
+    }, [uuid, rootContextData?.chats])
 
     const loadData = (chatUuid) => {
         if (Boolean(chatUuid)) {
             const selectedChat = rootContextData?.chats?.find((chat) => chat.uuid === uuid);
-            if(Boolean(selectedChat)){
+            if (Boolean(selectedChat)) {
                 setContentChats(selectedChat.contents);
                 return;
-            }                     
+            }
         }
         setContentChats([]);
     }
 
-    useLayoutEffect(()=>{
-        scrollRef?.current?.scrollIntoView({ block: 'end' });    
-    },[contentChats])
+    useLayoutEffect(() => {
+        scrollRef?.current?.scrollIntoView({ block: 'end' });
+    }, [contentChats])
 
     return (
         <div className="border rounded-lg p-4 my-3 border-gray-300 h-full scroll-auto overflow-y-auto">
-            {contentChats?.map((chat)=>{
-                if(chat.role === "user"){
-                    return <MessageUserCloud>{chat?.parts?.at(-1)?.text}</MessageUserCloud>;
-                    
+            {contentChats?.map((chat) => {
+                if (chat.role === "user") {
+                    return <MessageUserCloud>{chat?.parts?.at(0)?.text}</MessageUserCloud>;
+
                 }
-                return <MessageAICloud>{chat?.parts?.at(-1)?.text}</MessageAICloud>;
+                return <MessageAICloud>{chat?.parts?.at(0)?.text}</MessageAICloud>;
             })}
-            <div ref={scrollRef}/>
+            <div ref={scrollRef} />
         </div>
     )
 }

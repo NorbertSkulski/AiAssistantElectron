@@ -1,5 +1,5 @@
 {
-  "name": "aiasisstantelectron",
+  "name": "AI-Assistant",
   "version": "1.0.2",
   "main": "src/main.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {
-    "appId": "com.twojanazwa.apka",
-    "productName": "Moja Super Apka",
+    "appId": "aiassistant",
+    "productName": "AI-Assistant",
     "directories": {
       "output": "dist-electron"
     },
@@ -57,10 +57,12 @@
     "cmdk": "^1.1.1",
     "crypto": "^1.0.1",
     "dexie": "^4.4.2",
+    "dompurify": "^3.4.2",
     "events": "^3.3.0",
     "formik": "^2.4.9",
     "fs": "^0.0.1-security",
     "lucide-react": "^1.8.0",
+    "marked": "^18.0.3",
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
