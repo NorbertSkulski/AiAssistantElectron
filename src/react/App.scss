@@ -1,6 +1,6 @@
 
 :root{
-    --main-bg-color: rgb(0, 152, 190);
+    --main-bg-color: rgb(19 109 131);;
     --menu-bg-color: rgb(0, 120, 150);
 }
 
@@ -9,7 +9,12 @@ body{
 }
 
 .MainWindow{
-    background-color:var(--main-bg-color);
+    background: linear-gradient(to right,rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)), url("../imgs/img1.jpg");
+    background-position: left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    // background-color:var(--main-bg-color);
     display: grid;
     width: 100%;
     height: 100%;
@@ -30,7 +35,7 @@ body{
     }
 
     .ContentArea{
-        background-color: var(--main-bg-color);
+        // background-color: var(--main-bg-color);
         grid-column: 2/3;
         display: flex;
         justify-content: center;

@@ -1,6 +1,6 @@
 {
   "name": "AI-Assistant",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "main": "src/main.js",
   "scripts": {
     "start": "concurrently \"vite\" \"wait-on \"http://localhost:5173\" && cross-env NODE_ENV=development electron .\"",
@@ -23,7 +23,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "icon.png"
+      "icon": "src/icon.png"
     },
     "nsis": {
       "oneClick": false,
@@ -63,6 +63,7 @@
     "fs": "^0.0.1-security",
     "lucide-react": "^1.8.0",
     "marked": "^18.0.3",
+    "material-symbols": "^0.44.6",
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

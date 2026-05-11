@@ -59,7 +59,7 @@ const MainTextArea = (props) => {
         const sendPayload = [{ text: value }];
         if (imagesToSend.length > 0) {
             for (const img of imagesToSend) {
-                sendPayload.push({inlineData:{ mimeType: "image/png", data: img?.split(',')[1] }});
+                sendPayload.push({ inlineData: { mimeType: "image/png", data: img?.split(',')[1] } });
             }
             setImagesToSend([]);
         }
@@ -79,15 +79,24 @@ const MainTextArea = (props) => {
                 }
                 return chat;
             }))
-            if(!uuid){
-                rootContextData?.setChats((prev) => [...prev,{uuid:null,name:chatNameField,contents:[{ role: "user", parts: [{ text: value }] }, { role: "model", parts: [{ text: "..." }] }] }]);
+            if (!uuid) {
+                rootContextData?.setChats((prev) => [...prev, { uuid: null, name: chatNameField, contents: [{ role: "user", parts: [{ text: value }] }, { role: "model", parts: [{ text: "..." }] }] }]);
             }
             setValue("");
             event.preventDefault();
         }
     }
 
-    return <Textarea value={value} onChange={(e) => setValue(e.target.value)} onKeyDown={onSubmitEvent} className="max-h-4 resize-none overflow-hidden" placeholder="Type your message here." />
+    return <div className="relative">
+        <Textarea value={value} onChange={(e) => setValue(e.target.value)} onKeyDown={onSubmitEvent} className="max-h-4 resize-none overflow-hidden" placeholder="Type your message here." />
+        <span className="absolute top-1 right-2 text-sm flex text-gray-400">
+            <span className="material-symbols-rounded" style={{ fontSize: "18px" }}>
+                attach_file
+            </span>
+            {Number(imagesToSend?.length)}
+        </span>
+
+    </div>
 }
 
 export default MainTextArea;

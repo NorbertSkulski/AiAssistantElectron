@@ -1,6 +1,6 @@
 import {
     Command,
-    CommandDialog,
+    CommandShortcut,
     CommandEmpty,
     CommandGroup,
     CommandInput,
@@ -13,6 +13,7 @@ import settingsDb from "../../apis/indexedDb/settingsDb";
 import { useRootContext } from "../../context/RootContext";
 import "./Menu.scss";
 import { useLayoutEffect, useState } from "react";
+import chatsDb from "../../apis/indexedDb/chatsDb";
 
 const Menu = () => {
 
@@ -60,15 +61,21 @@ const Menu = () => {
     }
 
 
-    useLayoutEffect(()=>{
+    useLayoutEffect(() => {
         const menu = document.querySelector('.MainWindow');
-        if(menu.classList.contains('CloseMenu')){
+        if (menu.classList.contains('CloseMenu')) {
             setIsClose(true);
             return;
         }
         setIsClose(false);
     })
 
+    const onDeleteChat = async (e, uuid) => {
+        console.log("uuid:", uuid);
+        await chatsDb.chats.delete(uuid);
+        rootContextData.setChats(prev => prev.filter(chat => chat.uuid !== uuid));
+        e.stopPropagation();
+    }
 
 
     return (
@@ -79,7 +86,16 @@ const Menu = () => {
                 <CommandGroup heading="Patients">
                     <CommandItem onSelect={() => openChat()} >New chat</CommandItem>
                     {rootContextData?.chats.map((chat) => (
-                        <CommandItem onSelect={() => openChat(chat.uuid)} key={chat.uuid}>{chat.name}</CommandItem>
+                        <CommandItem onSelect={() => openChat(chat.uuid)} key={chat.uuid}>
+                            {chat.name}
+                            <CommandShortcut>
+                                <Button key={`button-${chat.uuid}`} onClick={(e) => onDeleteChat(e, chat.uuid)} variant="inline" size="xs">
+                                    <span className="material-symbols-rounded text-red-700" style={{ fontSize: "15px" }}>
+                                        delete
+                                    </span>
+                                </Button>
+                            </CommandShortcut>
+                        </CommandItem>
                     ))}
                 </CommandGroup>
                 <CommandSeparator />
@@ -87,7 +103,7 @@ const Menu = () => {
                     <CommandItem onSelect={() => openChat("settings")}>Settings</CommandItem>
                 </CommandGroup>
             </CommandList>
-            <Button className="mt-auto mb-2 w-full " onClick={toggleMenu}>{isClose?"Open":"Close"}</Button>
+            <Button className="mt-auto mb-2 w-full " onClick={toggleMenu}>{isClose ? "Open" : "Close"}</Button>
         </Command>
     )
 }
