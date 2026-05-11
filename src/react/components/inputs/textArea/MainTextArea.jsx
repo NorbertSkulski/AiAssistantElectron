@@ -33,7 +33,6 @@ const MainTextArea = (props) => {
             if (window.api && window.api.getClipboardImage) {
                 const data = window.api.getClipboardImage();
                 if (data) {
-                    console.log("Obrazek pobrany!", data);
                     setImagesToSend(prev => [...prev, data]);
                     window.api.clearClipboard();
                 }
@@ -44,7 +43,6 @@ const MainTextArea = (props) => {
 
         // document.addEventListener('paste', clipboardPasteHandler);
         return () => {
-            console.log("Unmount MainTextArea, removing clipboard listener");
             // document.removeEventListener('paste', clipboardPasteHandler);
             clearInterval(inter);
         }
@@ -56,8 +54,6 @@ const MainTextArea = (props) => {
 
     const rootContextData = useRootContext();
 
-    console.log("imagesToSend", imagesToSend)
-
     const sendMessageToAi = async () => {
 
         const sendPayload = [{ text: value }];
@@ -68,9 +64,9 @@ const MainTextArea = (props) => {
             setImagesToSend([]);
         }
 
-        const chatUuid = await geminiGenerateText(uuid, chatNameField, sendPayload);
+        const chat = await geminiGenerateText(uuid, chatNameField, sendPayload);
         if (!uuid)
-            rootContextData?.setSelectedChat(chatUuid);
+            rootContextData?.setSelectedChat(chat);
         rootContextData?.loadChatsData();
     }
 
@@ -83,6 +79,9 @@ const MainTextArea = (props) => {
                 }
                 return chat;
             }))
+            if(!uuid){
+                rootContextData?.setChats((prev) => [...prev,{uuid:null,name:chatNameField,contents:[{ role: "user", parts: [{ text: value }] }, { role: "model", parts: [{ text: "..." }] }] }]);
+            }
             setValue("");
             event.preventDefault();
         }

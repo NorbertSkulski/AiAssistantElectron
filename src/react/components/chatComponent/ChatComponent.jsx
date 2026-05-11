@@ -26,7 +26,7 @@ const MessageAICloud = ({ children }) => {
 
 const ChatComponent = (props) => {
 
-    const { uuid } = props;
+    const { uuid, chatNameField } = props;
 
     const [contentChats, setContentChats] = useState([]);
 
@@ -36,12 +36,20 @@ const ChatComponent = (props) => {
 
 
     useEffect(() => {
-        loadData(uuid);
+        loadData();
     }, [uuid, rootContextData?.chats])
 
-    const loadData = (chatUuid) => {
-        if (Boolean(chatUuid)) {
+    const loadData = () => {
+        if (Boolean(uuid)) {
             const selectedChat = rootContextData?.chats?.find((chat) => chat.uuid === uuid);
+            if (Boolean(selectedChat)) {
+                setContentChats(selectedChat.contents);
+                return;
+            }
+        }
+
+        if(Boolean(chatNameField) && !uuid){
+            const selectedChat = rootContextData?.chats?.find((chat) => chat.name === chatNameField && !chat.uuid);
             if (Boolean(selectedChat)) {
                 setContentChats(selectedChat.contents);
                 return;
