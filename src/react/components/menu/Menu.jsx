@@ -7,24 +7,27 @@ import {
     CommandItem,
     CommandList,
     CommandSeparator,
-    CommandShortcut,
 } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import settingsDb from "../../apis/indexedDb/settingsDb";
 import { useRootContext } from "../../context/RootContext";
 import "./Menu.scss";
+import { useLayoutEffect, useState } from "react";
 
 const Menu = () => {
 
     const rootContextData = useRootContext();
 
+    const [isClose, setIsClose] = useState(false);
 
     const toggleMenu = async () => {
         const settingMenu = await settingsDb.settings.get({ key: 'menuClose' });
         if (!settingMenu) {
             await settingsDb.settings.add({ key: 'menuClose', value: true });
+            setIsClose(true);
         } else {
             await settingsDb.settings.update(settingMenu.id, { value: !settingMenu.value });
+            setIsClose(!settingMenu.value);
         }
         const menu = document.querySelector('.MainWindow');
         menu.classList.toggle('CloseMenu');
@@ -49,12 +52,23 @@ const Menu = () => {
         if (content.classList.contains('show')) {
             content.classList.remove('show');
         }
-     
+
         const timeout = setTimeout(() => {
             content.classList.add('show');
             clearTimeout(timeout);
         }, 400);
     }
+
+
+    useLayoutEffect(()=>{
+        const menu = document.querySelector('.MainWindow');
+        if(menu.classList.contains('CloseMenu')){
+            setIsClose(true);
+            return;
+        }
+        setIsClose(false);
+    })
+
 
 
     return (
@@ -73,7 +87,7 @@ const Menu = () => {
                     <CommandItem onSelect={() => openChat("settings")}>Settings</CommandItem>
                 </CommandGroup>
             </CommandList>
-            <Button className="mt-auto mb-2 w-full " onClick={toggleMenu}>Close</Button>
+            <Button className="mt-auto mb-2 w-full " onClick={toggleMenu}>{isClose?"Open":"Close"}</Button>
         </Command>
     )
 }
