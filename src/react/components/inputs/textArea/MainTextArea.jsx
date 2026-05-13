@@ -6,6 +6,12 @@ import { geminiGenerateText } from "../../../apis/geminiAi/geminiAi";
 const MainTextArea = (props) => {
 
     const [imagesToSend, setImagesToSend] = useState([]);
+
+    const resetAttachment = () => {
+        setImagesToSend([]);
+    }
+
+
     // const blobToBase64 = (blob) => {
     //     return new Promise((resolve, reject) => {
     //       const reader = new FileReader();
@@ -90,7 +96,7 @@ const MainTextArea = (props) => {
     return <div className="relative">
         <Textarea value={value} onChange={(e) => setValue(e.target.value)} onKeyDown={onSubmitEvent} className="max-h-4 resize-none overflow-hidden" placeholder="Type your message here." />
         <span className="absolute top-1 right-2 text-sm flex text-gray-400">
-            <span className="material-symbols-rounded" style={{ fontSize: "18px" }}>
+            <span title="Remove attachments" className=" cursor-pointer material-symbols-rounded hover:text-red-700" onClick={resetAttachment} style={{ fontSize: "18px" }}>
                 attach_file
             </span>
             {Number(imagesToSend?.length)}
