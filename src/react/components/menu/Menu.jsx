@@ -12,12 +12,14 @@ import { Button } from "@/components/ui/button"
 import settingsDb from "../../apis/indexedDb/settingsDb";
 import { useRootContext } from "../../context/RootContext";
 import "./Menu.scss";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import chatsDb from "../../apis/indexedDb/chatsDb";
 
 const Menu = () => {
 
     const rootContextData = useRootContext();
+
+    const [sortedChats, setSortedChats] = useState([]);
 
     const [isClose, setIsClose] = useState(false);
 
@@ -71,11 +73,35 @@ const Menu = () => {
     })
 
     const onDeleteChat = async (e, uuid) => {
-        console.log("uuid:", uuid);
         await chatsDb.chats.delete(uuid);
         rootContextData.setChats(prev => prev.filter(chat => chat.uuid !== uuid));
         e.stopPropagation();
     }
+
+    const calcContentsWeight = (chat) => {
+        const chatCnt = chat?.contents?.filter(el=>el?.role==="model")?.length;
+        const val = chat?.contents?.filter(el=>el?.role==="model")?.reduce((x, y) => {
+                const start = y?.parts?.find(elm=>Object.keys(elm).includes("text"))?.text?.indexOf("[");
+                const end = y?.parts?.find(elm=>Object.keys(elm).includes("text"))?.text?.indexOf("]");
+                if(start < 0 || end < 0) 
+                    return x;
+                const tmp = Number(y?.parts?.find(elm=>Object.keys(elm).includes("text"))?.text?.slice(start+1, end));
+                if(!tmp || isNaN(tmp))
+                    return x;
+                return x+tmp;
+            }, 0)
+        return val/chatCnt;
+    }
+
+    useEffect(() => {
+        const chatsToSort = rootContextData?.chats;
+        chatsToSort.sort((a, b) => {
+            const valA = calcContentsWeight(a);
+            const valB= calcContentsWeight(b);
+            return valB-valA;
+        });
+        setSortedChats(chatsToSort);
+    }, [rootContextData?.chats])
 
 
     return (
@@ -85,7 +111,7 @@ const Menu = () => {
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Patients">
                     <CommandItem onSelect={() => openChat()} >New chat</CommandItem>
-                    {rootContextData?.chats.map((chat) => (
+                    {sortedChats.map((chat) => (
                         <CommandItem onSelect={() => openChat(chat.uuid)} key={chat.uuid}>
                             {chat.name}
                             <CommandShortcut>

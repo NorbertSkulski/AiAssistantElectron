@@ -40,6 +40,7 @@ const ChatRoute = (props) => {
     }
 
     return <div className="ChatRoute flex flex-col h-full p-4">
+        <span className="absolute right-5 top-2 text-gray-400"> Screenshot: ALT + P </span>
         <MainInput onChange={onChangeName} onFocus={onFocus} onBlur={onBlur} onKeyUp={onKeyUp} value={name} type="text" placeholder="Chat Name" label="Name" />
         <ChatComponent uuid={uuid} chatNameField={name} />
         <MainTextArea uuid={uuid} chatNameField={name} />

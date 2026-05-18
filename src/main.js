@@ -4,7 +4,7 @@ const { snippedWindow } = require('./snippet');
 
 let win;
 let tray;
-// Menu.setApplicationMenu(null);
+Menu.setApplicationMenu(null);
 const isDev = process.env.NODE_ENV === 'development';
 const createWindow = () => {
     win = new BrowserWindow({

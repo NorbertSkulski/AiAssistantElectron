@@ -4,7 +4,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "concurrently \"vite\" \"wait-on \"http://localhost:5173\" && cross-env NODE_ENV=development electron .\"",
-    "build": "vite build && electron-builder",
+    "build": "vite build && electron-builder --win",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {

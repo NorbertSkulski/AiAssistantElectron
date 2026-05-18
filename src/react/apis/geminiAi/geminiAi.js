@@ -28,7 +28,7 @@ export const geminiGenerateText = async (chatUuid, name, parts) => {
             model: GEMINI_API_MODEL?.value,
             contents: contents,
             config: {
-                systemInstruction: Boolean(GEMINI_API_SYS_INST.value) ? GEMINI_API_SYS_INST.value : "Jesteś sztuczną inteligencją która ma pomagać w rozpoznawaniu chorób na podstawie danych przeslanych przez użytkownika.",
+                systemInstruction: (Boolean(GEMINI_API_SYS_INST.value) ? GEMINI_API_SYS_INST.value : "Jesteś sztuczną inteligencją która ma pomagać w rozpoznawaniu chorób na podstawie danych przeslanych przez użytkownika.")+" dodaj na końcu wiadomości ocene zagrożenia od 0 do 10 w formie [x] podawaj zawsze na koncu wiadomości bo służy to do sortowania.",
                 temperature: 0.1,
             },
         });

@@ -62,14 +62,29 @@ const ChatComponent = (props) => {
         scrollRef?.current?.scrollIntoView({ block: 'end' });
     }, [contentChats])
 
+
+    const chatText = (chat) => {
+
+        const text = chat?.parts?.at(0)?.text;
+        
+        const start = text?.indexOf("[");
+        const end = text?.indexOf("]");
+        const range = Number(Math.abs(start - end)+1);
+        const tmp = text?.split("");
+        if(start !== -1 && end !== -1) {
+            tmp?.splice(start,range,"")
+        }
+        return tmp?.join("");
+    }
+
     return (
         <div className="border rounded-lg p-4 my-3 border-gray-300 h-full scroll-auto overflow-y-auto">
             {contentChats?.map((chat) => {
                 if (chat.role === "user") {
-                    return <MessageUserCloud>{chat?.parts?.at(0)?.text}</MessageUserCloud>;
+                    return <MessageUserCloud>{chatText(chat)}</MessageUserCloud>;
 
                 }
-                return <MessageAICloud>{chat?.parts?.at(0)?.text}</MessageAICloud>;
+                return <MessageAICloud>{chatText(chat)}</MessageAICloud>;
             })}
             <div ref={scrollRef} />
         </div>
