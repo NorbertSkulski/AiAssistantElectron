@@ -4,8 +4,24 @@ const { snippedWindow } = require('./snippet');
 
 let win;
 let tray;
-Menu.setApplicationMenu(null);
-const isDev = process.env.NODE_ENV === 'development';
+
+const template = [
+    {
+        label: "Edit",
+        submenu: [
+            { role: "undo" },
+            { role: "redo" },
+            { type: "separator" },
+            { role: "cut" },
+            { role: "copy" },
+            { role: "paste" },
+            { role: "selectAll" },
+        ],
+    },
+];
+
+Menu.setApplicationMenu(Menu.buildFromTemplate(template)); const isDev = process.env.NODE_ENV === 'development';
+
 const createWindow = () => {
     win = new BrowserWindow({
         width: 1200,
@@ -13,7 +29,7 @@ const createWindow = () => {
         autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-            contextIsolation: true, 
+            contextIsolation: true,
             nodeIntegration: false,
             sandbox: false
         }
