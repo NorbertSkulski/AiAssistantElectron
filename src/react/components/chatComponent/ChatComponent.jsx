@@ -65,7 +65,7 @@ const ChatComponent = (props) => {
 
     const chatText = (chat) => {
 
-        const text = chat?.parts?.at(0)?.text;
+        const text = chat?.parts?.find(elm=>Object.keys(elm).includes("text"))?.text;
         
         const start = text?.indexOf("[");
         const end = text?.indexOf("]");
